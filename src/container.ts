@@ -1,7 +1,13 @@
-export interface Container {}
+import { SystemController } from "@/controllers/";
+
+export interface Container {
+  systemController: SystemController;
+}
 
 export function initializeContainer(): Container {
-  const container = {};
+  const systemController = new SystemController();
 
-  return container;
+  return {
+    systemController,
+  };
 }

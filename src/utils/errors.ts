@@ -1,4 +1,4 @@
-import { ErrorCode } from "./error-codes";
+import { ErrorCode } from "@/utils";
 
 export abstract class CustomError {
   constructor(

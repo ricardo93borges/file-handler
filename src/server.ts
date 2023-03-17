@@ -1,10 +1,14 @@
 import express, { Express } from "express";
 import http from "http";
 import bodyParser from "body-parser";
-import config from "./config";
+import config from "@/config";
 import { Container } from "./container";
+import { SystemRouter } from "@/routers";
 
 function setRouters(app: Express, container: Container) {
+  const systemRouter = new SystemRouter(container);
+
+  app.use("/", systemRouter.getRouter());
   return app;
 }
 
