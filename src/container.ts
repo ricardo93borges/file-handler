@@ -10,9 +10,9 @@ export interface Container {
 
 export function initializeContainer(): Container {
   const fileHandlerService = new FileHandlerService(
-    config.maxFileSize,
-    config.fileField,
-    config.fileDestination
+    config.fileUpload.maxFileSize,
+    config.fileUpload.fileField,
+    config.fileUpload.fileDestination
   );
 
   const systemController = new SystemController();
