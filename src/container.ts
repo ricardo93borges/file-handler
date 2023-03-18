@@ -1,11 +1,12 @@
 import config from "@/config";
 import { FileController, SystemController } from "@/controllers/";
-import { FileHandlerService } from "./services";
+import { CacheManagerService, FileHandlerService } from "./services";
 
 export interface Container {
   systemController: SystemController;
   fileController: FileController;
   fileHandlerService: FileHandlerService;
+  cacheManagerService: CacheManagerService;
 }
 
 export function initializeContainer(): Container {
@@ -15,12 +16,19 @@ export function initializeContainer(): Container {
     config.fileUpload.fileDestination
   );
 
+  const cacheManagerService = new CacheManagerService();
+
   const systemController = new SystemController();
-  const fileController = new FileController(fileHandlerService);
+  const fileController = new FileController(
+    fileHandlerService,
+    cacheManagerService,
+    config.fileUpload.maxConcurrentProcess
+  );
 
   return {
     fileHandlerService,
     systemController,
     fileController,
+    cacheManagerService,
   };
 }

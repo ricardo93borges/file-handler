@@ -25,3 +25,9 @@ export class BadRequest extends CustomError {
     super(code, message, httpStatusCode);
   }
 }
+
+export class ServiceUnavailable extends CustomError {
+  constructor(code: ErrorCode, message: string, httpStatusCode = 503) {
+    super(code, message, httpStatusCode);
+  }
+}

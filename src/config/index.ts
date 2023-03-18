@@ -22,6 +22,9 @@ const config = {
     maxFileSize: process.env.MAX_FILE_SIZE
       ? parseInt(process.env.MAX_FILE_SIZE, 10)
       : 52428800,
+    maxConcurrentProcess: process.env.MAX_CONCURRENT_PROCESS
+      ? parseInt(process.env.MAX_CONCURRENT_PROCESS, 10)
+      : 5,
   },
 };
 

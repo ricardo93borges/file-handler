@@ -15,7 +15,10 @@ export class FileHandlerService {
   }
 
   validate(fileSize: number): boolean {
-    return fileSize < this.maxFileSize;
+    if (fileSize > this.maxFileSize) {
+      return false;
+    }
+    return true;
   }
 
   setupStorage(): StorageEngine {
