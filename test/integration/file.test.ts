@@ -16,7 +16,10 @@ describe("File Controller", () => {
 
       const app = setupServer(container);
 
-      let response = await request(app).post("/file/upload");
+      let response = await request(app)
+        .post("/file/upload")
+        .set("content-length", "50000")
+        .set("content-type", "text/csv");
 
       expect(response.status).toBe(204);
 

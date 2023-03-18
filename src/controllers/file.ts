@@ -1,17 +1,10 @@
 import { Request, Response } from "express";
 import { Controller } from "./Controller";
 import { CacheManagerService, FileHandlerService } from "@/services";
-import { ErrorCode } from "@/utils";
-
-type Validation = {
-  isValid: boolean;
-  httpStatusCode?: number;
-  code?: string;
-  message?: string;
-};
+import { BadRequest, ErrorCode, ServiceUnavailable } from "@/utils";
 
 export class FileController extends Controller {
-  private readonly filesProcessingKey = "FILES_PROCESSING";
+  readonly filesProcessingKey = "FILES_PROCESSING";
 
   constructor(
     private readonly fileHandlerService: FileHandlerService,
@@ -37,48 +30,31 @@ export class FileController extends Controller {
     return this.cacheManagerService.get(this.filesProcessingKey);
   }
 
-  async validate(fileSize: number): Promise<Validation> {
+  async validate(fileSize: number): Promise<boolean> {
     const filesProcessing = await this.getFilesProcessing();
-    console.log("filesProcessing", filesProcessing);
 
     if (filesProcessing) {
-      if (filesProcessing > this.maxConcurrentProcess) {
-        return {
-          isValid: false,
-          httpStatusCode: 503,
-          code: ErrorCode.SERVICE_UNAVAILABLE,
-          message: "service unavailable",
-        };
+      if (filesProcessing >= this.maxConcurrentProcess) {
+        throw new ServiceUnavailable();
       }
     }
 
     const isValid = this.fileHandlerService.validate(fileSize);
     if (!isValid) {
-      return {
-        isValid: false,
-        httpStatusCode: 400,
-        code: ErrorCode.BAD_REQUEST_ERROR,
-        message: "File too large. Max file size allowed: 50MB",
-      };
+      throw new BadRequest("File too large. Max file size allowed: 50MB");
     }
 
-    return { isValid: true };
+    return true;
   }
 
-  uploadFile = async (req: Request, res: Response) => {
+  uploadFile = async (req: Request, res: Response): Promise<void> => {
     try {
       const fileSize = parseInt(req.headers["content-length"]!, 10);
-      const { isValid, httpStatusCode, code, message } = await this.validate(
-        fileSize
-      );
-
-      if (!isValid) {
-        await this.decreaseFilesProcessing();
-        return res.status(httpStatusCode!).send({ code, message });
-      }
-
+      console.log("> 1");
+      await this.validate(fileSize);
+      console.log("> 2");
       await this.increaseFilesProcessing();
-
+      console.log("> 3");
       this.fileHandlerService.upload(req, res, async (err) => {
         if (err) {
           console.error(err);
@@ -96,6 +72,8 @@ export class FileController extends Controller {
         }
       });
     } catch (err) {
+      console.log("> ERR", err);
+      await this.decreaseFilesProcessing();
       this.handleExceptions(res, err);
     }
   };
