@@ -3,12 +3,14 @@ import http from "http";
 import bodyParser from "body-parser";
 import config from "@/config";
 import { Container } from "./container";
-import { SystemRouter } from "@/routers";
+import { SystemRouter, FileRouter } from "@/routers";
 
 function setRouters(app: Express, container: Container) {
   const systemRouter = new SystemRouter(container);
+  const fileRouter = new FileRouter(container);
 
   app.use("/", systemRouter.getRouter());
+  app.use("/file", fileRouter.getRouter());
   return app;
 }
 
