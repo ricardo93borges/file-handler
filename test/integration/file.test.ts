@@ -22,7 +22,7 @@ describe("File Controller", () => {
       let response = await request(app)
         .post("/file/upload")
         .set("content-length", "50000")
-        .set("content-type", "text/csv");
+        .set("authorization", "Basic YWRtaW46YWRtaW4=");
 
       expect(response.status).toBe(204);
 
@@ -57,6 +57,7 @@ describe("File Controller", () => {
       const response = await request(app)
         .post("/file/upload")
         .set("content-length", "50000")
+        .set("authorization", "Basic YWRtaW46YWRtaW4=")
         .attach("file", `${__dirname}/test-file.csv`);
 
       expect(response.status).toBe(204);

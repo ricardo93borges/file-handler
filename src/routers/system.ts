@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { Container } from "@/container";
 import { SystemController } from "@/controllers";
+import { auth } from "@/middlewares";
 
 export class SystemRouter {
   private router: Router;
@@ -12,7 +13,7 @@ export class SystemRouter {
   }
 
   getRouter() {
-    this.router.get("/health", this.systemController.getHealthData);
+    this.router.get("/health", auth, this.systemController.getHealthData);
 
     return this.router;
   }

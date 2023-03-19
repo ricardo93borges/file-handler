@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { Container } from "@/container";
 import { FileController } from "@/controllers";
-import { validator } from "@/middlewares";
+import { auth, validator } from "@/middlewares";
 import { uploadFileSchema } from "@/schemas";
 
 export class FileRouter {
@@ -16,6 +16,7 @@ export class FileRouter {
   getRouter() {
     this.router.post(
       "/upload",
+      auth,
       validator(uploadFileSchema),
       this.fileController.uploadFile
     );
