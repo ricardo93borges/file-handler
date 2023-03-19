@@ -5,4 +5,7 @@ README.md
 babel.config.js
 jest.config.ts
 project.code-workspace
-uploads
+.env.sample
+.eslintrc
+.gitignore
+file_handler.postman_collection

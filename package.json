@@ -17,7 +17,7 @@
     "clean": "rimraf dist/"
   },
   "engines": {
-    "node": "18"
+    "node": "16"
   },
   "repository": {
     "type": "git",
