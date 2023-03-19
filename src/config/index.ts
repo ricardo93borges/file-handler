@@ -2,7 +2,21 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-const config = {
+export type Config = {
+  server: {
+    httpPort: number;
+    rateLimitWindowMS: number;
+    maxRequestsPerWindow: number;
+  };
+  fileUpload: {
+    fileField: string;
+    fileDestination: string;
+    maxFileSize: number;
+    maxConcurrentProcess: number;
+  };
+};
+
+const config: Config = {
   server: {
     httpPort: process.env.HTTP_PORT
       ? parseInt(process.env.HTTP_PORT, 10)

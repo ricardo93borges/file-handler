@@ -50,11 +50,11 @@ export class FileController extends Controller {
   uploadFile = async (req: Request, res: Response): Promise<void> => {
     try {
       const fileSize = parseInt(req.headers["content-length"]!, 10);
-      console.log("> 1");
+
       await this.validate(fileSize);
-      console.log("> 2");
+
       await this.increaseFilesProcessing();
-      console.log("> 3");
+
       this.fileHandlerService.upload(req, res, async (err) => {
         if (err) {
           console.error(err);
@@ -72,7 +72,6 @@ export class FileController extends Controller {
         }
       });
     } catch (err) {
-      console.log("> ERR", err);
       await this.decreaseFilesProcessing();
       this.handleExceptions(res, err);
     }

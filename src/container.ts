@@ -1,4 +1,4 @@
-import config from "@/config";
+import { Config } from "@/config";
 import { FileController, SystemController } from "@/controllers/";
 import { CacheManagerService, FileHandlerService } from "./services";
 
@@ -9,7 +9,7 @@ export interface Container {
   cacheManagerService: CacheManagerService;
 }
 
-export function initializeContainer(): Container {
+export function initializeContainer(config: Config): Container {
   const fileHandlerService = new FileHandlerService(
     config.fileUpload.maxFileSize,
     config.fileUpload.fileField,
