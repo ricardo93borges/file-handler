@@ -1,6 +1,6 @@
 import { Schema } from "joi";
 import { NextFunction, Request, Response } from "express";
-import { ErrorCode } from "@/utils/error-codes";
+import { ErrorCode } from "@/utils";
 
 export const validator = (schema: Schema) => {
   return (req: Request, res: Response, next: NextFunction) => {
